@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Bazaar</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="/style.css">
+
+
+</head>
+<body>
+    
+    <!-- header section starts  -->
+
+<header class="header">
+
+    <div class="header-1">
+
+        <a href="/" class="logo"> <i class="fas fa-book"></i> Book Bazaar </a>
+
+        <!-- <form action="" class="search-form">
+            <input type="search" name="" placeholder="search here..." id="search-box">
+            <label for="search-box" class="fas fa-search"></label>
+        </form> -->
+        <form action="/search" class="search-form" method="GET">
+            <input type="search" name="q" placeholder="search here..." id="search-box">
+            <label for="search-box" class="fas fa-search"></label>
+        </form>
+
+        <div id="search-btn" class="fas fa-search" onclick="document.forms[0].submit()"></div>
+
+        <div class="icons">
+            <div id="search-btn" class="fas fa-search"></div>
+
+            <a href="#" id="add-book-link" class="fas fa-plus-square"></a>
+            <!-- <a href="#" class="fas fa-heart"></a> -->
+            <a href="#" class="fas fa-heart" onclick="redirectToFavorites()"></a>
+            <a href="#" class="fas fa-shopping-cart"></a>
+            
+            <div id="login-btn" class="fas fa-user" onclick="toggleDropdown()"></div>
+            <% if (showDropdown) { %>
+                <div id="account-options" style="display: none;">
+                    <div class="user-profile">
+                        <span>Welcome, <%= user.name %></span>
+                    </div>
+                    <ul>
+                        <a href="/userprofile">Profile</a>
+                        <a href="#">Orders</a>
+                        <button id="logoutButton">Logout</button>
+                    </ul>
+                </div>
+            <% } %>
+        </div>
+        
+
+    </div>
+
+    <div class="header-2">
+        <nav class="navbar">
+            <a href="#home">home</a>
+            <a href="#featured">featured</a>
+            <a href="#arrivals">arrivals</a>
+            <a href="#reviews">reviews</a>
+            <a href="/categories">Categories</a>
+        </nav>
+    </div>
+    
+
+</header>
+
+<!-- header section ends -->
+
+<!-- bottom navbar  -->
+
+<nav class="bottom-navbar">
+    <a href="#home" class="fas fa-home"></a>
+    <a href="#featured" class="fas fa-list"></a>
+    <a href="#arrivals" class="fas fa-tags"></a>
+    <a href="#reviews" class="fas fa-comments"></a>
+    <a href="#category" class="fas fa-category"></a>
+</nav>
+
+
+<!-- Cart Sidebar -->
+<div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-sidebar-content">
+      <h3>Your Cart</h3>
+      <ul id="cart-items"></ul>
+      <p>Total: ₹<span id="cart-total">0</span></p>
+      <!-- Coupon Section -->
+      <div class="coupon-section">
+        <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
+        <button id="apply-coupon-btn">Apply Coupon</button>
+    </div>
+      <button id="close-cart-btn" class="fas fa-times"></button>
+      <button id="checkout-btn">Checkout</button>
+    </div>
+  </div>
+  
+<!-- login form  -->
+
+<div class="login-form-container">
+
+    <div id="close-login-btn" class="fas fa-times"></div>
+
+    <form action="" id="signin">
+        <h3>sign in</h3>
+        <span>Email</span>
+        <input type="email" name="" class="box" placeholder="Enter your email" id="">
+        <span>password</span>
+        <input type="password" name="" class="box" placeholder="Enter your password" id="">
+        <!-- <div class="checkbox">
+            <input type="checkbox" name="" id="remember-me">
+            <label for="remember-me"> remember me</label>
+        </div> -->
+        <input type="submit" value="sign in" class="btn">
+        <p>Forgot password ? <a href="/auth/forgot-password">Click here</a></p>
+        <p>Don't have an account ? <a href="/registration.html">Create one</a></p>
+    </form>
+
+</div>
+
+
+<!-- home section starts  -->
+
+<section class="home" id="home">
+    
+
+    <div class="row">
+
+        <div class="content">
+            <h3>upto 60% off</h3>
+            <p>There is no friend as loyal as book. "It's the possibility of having a dream come true thats make life is interesting".</p>
+            <a href="#" class="btn"> Let's go shop now</a>
+        </div>
+
+        <div class="swiper books-slider">
+
+<div class="swiper-wrapper">
+    <% books.forEach(function(book) { %>
+        <div class="swiper-slide">
+            <a href="/bookDetails?id=<%= book.id %>" class="image-link">
+                <img src="<%= book.image %>" alt="<%= book.title %>">
+            </a>
+        </div>
+        <% }); %>
+</div>
+
+            <img src="/image/stand.png" class="stand" alt="">
+        </div>
+
+    </div>
+
+</section>
+
+<!-- home section ense  -->
+
+<!-- icons section starts  -->
+
+<section class="icons-container">
+
+    <div class="icons">
+        <i class="fas fa-shipping-fast"></i>
+        <div class="content">
+            <h3>Free shipping</h3>
+            <p>order over ₹300</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-lock"></i>
+        <div class="content">
+            <h3>Secure Payment</h3>
+            <p>100% Secure payment</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-redo-alt"></i>
+        <div class="content">
+            <h3>Easy Returns</h3>
+            <p>10 days returns</p>
+        </div>
+    </div>
+
+    <div class="icons">
+        <i class="fas fa-headset"></i>
+        <div class="content">
+            <h3>24/7 support</h3>
+            <p>Call us anytime</p>
+        </div>
+    </div>
+
+</section>
+
+<!-- icons section ends -->
+
+<!-- featured section starts  -->
+
+<section class="featured" id="featured">
+
+    <h1 class="heading"> <span>featured books</span> </h1>
+
+    <div class="swiper featured-slider">
+
+        <div class="swiper-wrapper">
+            <% books.forEach(function(book) { %>
+                <div class="swiper-slide box">
+                    <div class="icons">
+                        <a href="#" class="fas fa-search"></a>
+                        <!-- <a href="#" class="fas fa-heart"></a> -->
+                        <a href="#" class="fas fa-heart" onclick="addToFavorites('<%= book.id %>')"></a>
+                        <a href="#" class="fas fa-shopping-cart open-cart-btn"></a>
+                    </div>
+                    <div class="image">
+                        <a href="/bookDetails?id=<%= book.id %>"><img src="<%= book.image %>"
+                                alt="<%= book.title %>"></a>
+                    </div>
+                    <div class="content">
+                        <h3><%= book.title %></h3>
+                        <div class="price">₹<%= book.price %> </div>
+                        <button class="btn add-to-cart" data-name="<%= book.title %>" data-price="<%= book.price %>" data-image="<%= book.image %>">Add to Cart</button>
+                    </div>
+                </div>
+            <% }); %>
+        </div>        
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+
+    </div>
+
+</section>
+
+<!-- featured section ends -->
+
+<!-- newsletter section starts -->
+
+<section class="newsletter">
+
+    <form action="">
+        <h3>for latest updates</h3>
+        <input type="email" name="email" placeholder="enter your email" id="email" class="box">
+        <input type="submit" value="subscribe now" class="btn" onclick="subscribe()">
+    </form>
+
+</section>
+
+<!-- newsletter section ends -->
+
+<!-- arrivals section starts  -->
+
+<section class="arrivals" id="arrivals">
+
+    <h1 class="heading"> <span>new arrivals</span> </h1>
+
+    <div class="swiper arrivals-slider">
+
+        <div class="swiper-wrapper">
+            <% books.forEach(function(book) { %>
+                <a href="#" class="swiper-slide box">
+                    <div class="image">
+                        <img src="<%= book.image %>" alt="<%= book.title %>">
+                        <!-- <a href="/bookDetails?id=<%= book.id %>"><img src="<%= book.image %>" alt="<%= book.title %>"></a> -->
+                    </div>
+                    <div class="content">
+                        <h3><%= book.title %></h3>
+                        <div class="price">₹<%= book.price %></span></div>
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </a>
+            <% }); %>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- arrivals section ends -->
+
+<!-- deal section starts  -->
+
+<section class="deal">
+
+    <div class="content">
+        <h3>deal of the day</h3>
+        <h1>upto 20% off</h1>
+        <h2>use coupon: book20</h2>
+        <p>We review the best new business books and the tested classics in our monthly Book insights, available to members in text. </p>
+        <a href="#" class="btn">shop now</a>
+    </div>
+
+    <div class="image">
+        <img src="/image/deal-img.jpg" alt="">
+    </div>
+
+</section>
+
+<!-- deal section ends -->
+
+<!-- reviews section starts  -->
+<section class="reviews" id="reviews">
+    <h1 class="heading"> <span> Customer's Reviews</span> </h1>
+    <div class="swiper reviews-slider" id="reviews-slider">
+        <div class="swiper-wrapper">
+            <% ratings.forEach(function(rating) { %>
+                <div class="swiper-slide box">
+                    <div class="image">
+                        <img src="<%= rating.bookimg %>" alt="Book Image">
+                    </div>
+                    <h3>Customer: <%= rating.username %>
+                    </h3>
+                    <!-- <h4>Rating:</h4> -->
+                    <div class="stars">
+                        <% for (let i=1; i <=5; i++) { %>
+                            <% if (i <=rating.rating) { %>
+                                <i class="fas fa-star"></i>
+                                <% } else { %>
+                                    <i class="far fa-star"></i>
+                                    <% } %>
+                                        <% } %>
+                    </div>
+                    <p>Review: <%= rating.review %>
+                    </p>
+                </div>
+                <% }); %>
+        </div>
+    </div>
+</section>
+
+<!-- reviews section end  -->
+
+
+
+<!-- footer section starts  -->
+
+<section class="footer">
+
+    <div class="box-container">       
+
+        <div class="box">
+            <h3>Quick links</h3>
+            <a href="#home"> <i class="fas fa-arrow-right"></i> home </a>
+            <a href="#featured"> <i class="fas fa-arrow-right"></i> featured </a>
+            <a href="#arrivals"> <i class="fas fa-arrow-right"></i> arrivals </a>
+            <a href="#reviews"> <i class="fas fa-arrow-right"></i> reviews </a>
+            <!-- <a href="#"> <i class="fas fa-arrow-right"></i> blogs </a> -->
+         </div>
+
+        <div class="box">
+            <h3>Extra links</h3>
+            <a href="#"> <i class="fas fa-arrow-right"></i> account info </a>
+            <a href="#"> <i class="fas fa-arrow-right"></i> ordered items </a>
+            <!-- <a href="#"> <i class="fas fa-arrow-right"></i> privacy policy </a> -->
+            <a href="#"> <i class="fas fa-arrow-right"></i> payment method </a>
+            <a href="#"> <i class="fas fa-arrow-right"></i> our serivces </a>
+        </div>
+
+        <div class="box">
+            <h3>Contact info</h3>
+            <a href="#"> <i class="fas fa-phone"></i> +91 113-456-7890 </a>
+            <a href="#"> <i class="fas fa-phone"></i> +91 8010417200 </a>
+            <a href="#"> <i class="fas fa-envelope"></i> bookbazaar@gmail.com </a>
+            
+            <img src="/image/worldmap.png" class="map" alt="">
+        </div>
+        
+    </div>
+
+    <div class="share">
+        <a href="#" class="fab fa-facebook-f"></a>
+        <a href="#" class="fab fa-twitter"></a>
+        <a href="#" class="fab fa-instagram"></a>
+        <a href="#" class="fab fa-linkedin"></a>
+    </div>
+
+    <div class="credit"> BookBazaar | Made with &#10084;&#65039; </div>
+
+</section>
+
+<!-- footer section ends -->
+
+<!-- loader  -->
+
+<!-- <div class="loader-container">
+    <img src="image/loader-img.gif" alt="">
+</div> -->
+
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+<script src="/style.js"></script>
+<script src="/add_book.js"></script>
+<script src="/cart.js"></script>
+<script src="/sign_in.js"></script>
+<script src="/fav.js"></script>
+
+</body>
+</html>
+

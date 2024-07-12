@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #123;
+}
+
+.container {
+    max-width: 530px; /* Reduced max-width */
+    margin: 20px auto; /* Added margin */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added box shadow */
+    border-radius: 8px; /* Increased border radius */
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #2d3748;
+}
+
+.form-input {
+    padding: 12px; /* Increased padding */
+    border: 1px solid #cbd5e0;
+    border-radius: 8px; /* Increased border radius */
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s; /* Added transition effect */
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4a5568;
+}
+
+.button {
+    background-color: #2a4365;
+    color: #fff;
+    border: none;
+    padding: 14px 24px; /* Increased padding */
+    border-radius: 8px; /* Increased border radius */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Added transition effect */
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added box shadow */
+}
+
+.button:hover {
+    background-color: #1a365d;
+}
+
+/* Heading styles */
+.heading {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #2d3748;
+    margin-left: 1%;
+}
+
+/* Select dropdown styles */
+select.form-input {
+    padding: 12px; /* Increased padding */
+    border: 1px solid #cbd5e0;
+    border-radius: 8px; /* Increased border radius */
+    width: 100%;
+    box-sizing: border-box;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%231c1c1c'%3E%3Cpath d='M10 16l6-6H4l6 6z' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position-x: calc(100% - 10px);
+    background-position-y: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: border-color 0.3s; /* Added transition effect */
+}
+
+select.form-input:focus {
+    outline: none;
+    border-color: #4a5568;
+}
+.home {
+    background-color: #4a5568;
+    text-decoration: none; /* Remove underline */
+    margin-left: 10px; /* Add space between the button and the link */
+}
+/* New styles for book image and book info container */
+.book-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.book-image {
+    max-width: 20%; /* Adjust size as needed */
+    margin-right: 20px; /* Add space between image and heading */
+    border-radius: 8px; /* Add a subtle border radius */
+    margin-left: 43%;
+}
+
+/* Additional adjustments to the container */
+.container {
+    max-width: 600px; /* Adjust width as needed */
+    margin: 20px auto; /* Center container */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Rest of your existing CSS styles */
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <h2 class="heading">Update Book</h2>
+        <img src="<%= product.image %>" alt="Book Image" class="book-image"> -->
+        <div class="book-info">
+            <h2 class="heading">Update Book</h2>
+            <img src="<%= product.image %>" alt="Book Image" class="book-image">
+        </div>
+        <form action="/books/<%= product._id %>/update" method="POST" enctype="application/x-www-form-urlencoded">
+            <div class="form-group">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" id="title" name="title" value="<%= product.title %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="author" class="form-label">Author:</label>
+                <input type="text" id="author" name="author" value="<%= product.author %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="publication_year" class="form-label">Publication Year:</label>
+                <input type="number" id="publication_year" name="publication_year" value="<%= product.publication_year %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="publisher" class="form-label">Publisher:</label>
+                <input type="text" id="publisher" name="publisher" value="<%= product.publisher %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="language" class="form-label">Language:</label>
+                <input type="text" id="language" name="language" value="<%= product.language %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="category" class="form-label">Category:</label>
+                <select id="category" name="category" class="form-input" required>
+                    <option value="" selected disabled>Select a category</option>
+                    <option value="Fiction" <%= product.category === "Fiction" ? "selected" : "" %>>Fiction</option>
+                    <option value="Non-Fiction" <%= product.category === "Non-Fiction" ? "selected" : "" %>>Non-Fiction</option>
+                    <option value="Science" <%= product.category === "Science" ? "selected" : "" %>>Science</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description" class="form-label">Description:</label>
+                <textarea id="description" name="description" class="form-input" required><%= product.description %></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" id="price" name="price" step="0.01" value="<%= product.price %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity" class="form-label">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" value="<%= product.quantity %>" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button update-button">Update</button>
+                <a href="/admin" class="button home">Home</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+

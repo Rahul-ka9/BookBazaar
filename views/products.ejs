@@ -1,0 +1,198 @@
+
+<!-- products.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Page</title>
+    <style>
+
+/* SidebarWithHeader */
+.sidebar {
+  width: 250px; /* Adjust width as needed */
+  height: 100%;
+  background-color: #edf2f7;
+  padding: 20px;
+}
+
+.header {
+  background-color: #2a4365;
+  color: #fff;
+  padding: 20px;
+}
+
+/* HStack */
+.h-stack {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* VStack */
+.v-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+/* Button */
+.button {
+  background-color: #fff;
+  color: #4a5568;
+  padding: 8px 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #cbd5e0;
+}
+
+/* Heading */
+.heading {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+/* ProductsTable */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  padding-inline: 30px;
+}
+
+/* .table th {
+  background-color: #f8f9fa;
+  text-align: left;
+} */
+
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tbody tr:hover {
+  background-color: #1c2e42;
+}
+
+.custom-list {
+    list-style: none; /* Removes the bullet points */
+}
+
+/* .custom-list li a {
+    color: #fff; 
+} */
+.custom-list li {
+    margin-bottom: 1.5rem; /* Adds vertical space between list items */
+}
+
+.custom-list li a {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.custom-list li a.view {
+    background-color: #007bff; /* Blue color for view button */
+}
+
+.custom-list li a.update {
+    background-color: #28a745; /* Green color for update button */
+}
+
+.custom-list li a.delete {
+    background-color: #dc3545; /* Red color for delete button */
+}
+
+.custom-list li a:hover {
+  filter: brightness(86%);
+    /* background-color: darken(currentColor, 10%); Darken background color on hover */
+}
+
+  </style>
+</head>
+<body>
+
+    <div class="simple-grid" style="background-color: white; padding: 5px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 8px; overflow-x: auto;">
+      <% if (loading) { %>
+        <div class="loading">
+          <div class="spinner" style="margin-top: 20px; display: flex; align-items: center; justify-content: center;">
+            <div class="spinner-border text-brown" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach((product, index) => { %>
+              <tr>
+                <td>
+                  <img src="<%= product.image %>" alt="Product Image" style="width: 100px; height: auto; border-radius: 8px;">
+                </td>
+                <td>
+                  <div class="vstack" style="display: flex; flex-direction: column;">
+                    <span style="font-weight: bold;"><%= product.title %></span>
+                    <span style="font-size: large; color: green;">₹ <%= product.price %></span>
+                  </div>
+                </td>
+                <td>
+                  <div class="vstack" style="display: flex; flex-direction: column;">
+        
+                    <span style="font-weight: lighter;"><%= product.category %></span>
+                    <span style="font-size: large; color: lightseagreen;">Publisher: <%= product.publisher %></span>
+                  </div>
+                </td>
+                <td style="font-size: medium;"><%= product.quantity %></td>
+                <td>
+                  <div class="menu" style="position: relative;">
+                    <ul class="custom-list">
+                      <li><a href="/bookDetails?id=<%= product._id %>" class="view">View</a></li>
+                      <!-- <li><a href="#" class="update">Update</a></li> -->
+                      <li><a href="/books/products/<%= product._id %>/update" class="update">Update</a></li>
+                    <li>
+                      <a href="#" class="delete" data-product-id="<%= product._id %>" onclick="deleteBook(event, '<%= product._id %>')">Delete</a>
+                  </li>
+                  
+                    </ul>
+                  </div>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="Fully Responsive Dashboard using HTML and CSS, Admin Panel">
+        <meta name="keywords" content="Fully Responsive Dashboard using HTML and CSS, Admin Panel, Template, Web Template, HTML, HTML5, CSS, CSS3, Responsive Design, HTML and CSS Template, Awesome Layout">
+        <meta name="copyright" content=" 2023">
+        <meta name="author" content=" ">
+        <!-- Media Queries -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard</title>
+        <!-- Page Logo -->
+        <link rel="icon" type="image/icon" href="https://cdn-icons-png.flaticon.com/512/3524/3524659.png">
+        <!-- Font Awesome Library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Render All Elements Normally -->
+        <link rel="stylesheet" href="/Admin_css/normalize.css">
+        <!-- Main CSS File -->
+        <link rel="stylesheet" href="/Admin_css/style.css">
+    </head>
+    <body>
+        <!-- Start Navbar -->
+        <aside>
+            <ul>
+                <li>
+                    <figure>
+                        <img src="/image/user.png" alt="User Image" title="User Image">
+                    </figure>
+                    <h2>Admin</h2>
+                </li>
+                <li>
+                    <a class="active" href="#" title="Dashboard" onclick="setActiveNavLink(this)">
+                        <i class="fa-solid fa-house"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" title="Clients" onclick="setActiveNavLink(this)">
+                        <i class="fa-solid fa-user-group"></i>
+                        <p>Users</p>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" title="Products" onclick="loadProductsPage(this)" onclick="setActiveNavLink(this)">
+                        <i class="fa-solid fa-table-list"></i>
+                        <p>Products</p>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="#" title="Settings" onclick="setActiveNavLink(this)">
+                        <i class="fa-solid fa-gear"></i>
+                        <p>Settings</p>
+                        
+                    </a>
+                </li>
+                <li>
+                    <a title="Log Out" style="cursor: pointer;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <p>Log Out</p>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        <!-- End Navbar -->
+        
+        <!-- Start Content -->
+        <content>
+            <div>
+                <p>Dashboard</p>
+                <i class="fa fa-chart-bar"></i>
+            </div>
+            <main>
+                <article>
+                    <i class="fa-solid fa-user"></i>
+                    <div>
+                        <p>Users</p>
+                        <!-- <span>100</span> -->
+                        <span><%= totalUsers %></span>
+                    </div>
+                </article>
+                <article>
+                    <i class="fa-solid fa-pen"></i>
+                    <div>
+                        <p>Offers</p>
+                        <span>1</span>
+                    </div>
+                </article>
+                <a href="#" onclick="loadProductsPage(this)">
+                <article>
+                    <i class="fa-solid fa-table" style="color: #fff;"></i>
+                        <div>
+                        <p>Books</p>
+                        <span><%= totalBooks %></span>
+                    </div>
+                </article>
+            </a>
+                <article>
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    <div>
+                        <p>Sales</p>
+                        <span>₹ 14300</span>
+                    </div>
+                </article>
+            </main>
+            <div id="productsContainer" style="display: none;"></div>
+
+            <div id="usersContainer" style="display: none;"></div>
+
+        <!-- <div> -->
+            <div id="products">
+                <p>Books</p>
+                <i class="fa-solid fa-table"></i>
+            </div>
+            
+            <table id="booksTable">
+                <thead>
+                    <tr>
+                        <th>Book Title</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- The tbody will be filled by the fetch code in your JavaScript -->
+                </tbody>
+            </table>
+            
+
+            <!-- Start Footer -->
+            <footer>
+                <p>
+                    Copyright &copy; 2024 
+                    by BookBazaar
+                </p>
+                <span>All Rights Reserved</span>
+            </footer>
+            <!-- End Footer -->
+        </content>
+        <!-- End Content -->
+        <script>
+            document.querySelector('a[title="Log Out"]').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    fetch('/auth/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to a login page or a home page
+            window.location.href = '/';
+        } else {
+            console.error('Logout failed:', data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+function setActiveNavLink(clickedLink) {
+    // Remove active class from all buttons
+    const navLinks = document.querySelectorAll('aside li a');
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // Add active class to the clicked button
+    clickedLink.classList.add('active');
+
+       
+}
+
+    function loadProductsPage(clicked) {
+        setActiveNavLink(clicked);
+        hideTable();
+
+        fetch('/books/Books')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('productsContainer').innerHTML = data;
+                document.getElementById('productsContainer').style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function deleteBook(event, bookId) {
+    event.preventDefault(); // Prevent the default action (navigation)
+    
+    // Ask for confirmation
+    const confirmation = window.confirm('Are you sure you want to delete this book?');
+    
+    if (confirmation) {
+        // If the user clicked 'OK', send an AJAX request to delete the book
+        fetch('/books/deletebook/' + bookId, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // alert(data.message);
+                    window.location.href = '/admin';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+}
+
+    </script>
+        
+     <script>
+        window.onload = function() {
+            // Show the table when the page loads
+            showTable();
+
+            // Get the Dashboard button
+            var dashboardButton = document.querySelector('a[title="Dashboard"]');
+
+            // Add a click event listener to the Dashboard button
+            dashboardButton.addEventListener('click', function() {
+                showTable();
+                const div1 = document.querySelector('#productsContainer');
+                div1.style.display = 'none';
+            });
+
+            // Get the other buttons
+            var clientsButton = document.querySelector('a[title="Clients"]');
+            var productsButton = document.querySelector('a[title="Products"]');
+            var settingsButton = document.querySelector('a[title="Settings"]');
+
+            // Add a click event listener to each button
+            clientsButton.addEventListener('click', function() {
+                hideTable();
+                const div1 = document.querySelector('#productsContainer');
+                div1.style.display = 'none';
+            });
+
+            productsButton.addEventListener('click', function() {
+                hideTable();
+            });
+
+            settingsButton.addEventListener('click', function() {
+                hideTable();
+            });
+        }
+
+        function showTable() {
+            // Get the table element
+            const table = document.querySelector('#booksTable');
+
+            // Get the div element
+            const div = document.querySelector('#products');
+            const userdiv = document.querySelector('#usersContainer');
+            
+
+            // Initially hide the table and the div
+            table.style.display = 'none';
+            div.style.display = 'none';
+            userdiv.style.display = 'none';
+
+            // Your existing fetch code here
+            fetch('/allBooks')
+              .then(response => response.json())
+              .then(data => {
+                const books = data.books;
+                if (Array.isArray(books) && books.length > 0) {
+                    // Clear the table body
+                    const tbody = table.querySelector('tbody');
+                    tbody.innerHTML = '';
+                  // Show the table and the div
+                  table.style.display = 'revert';
+                  div.style.display = 'flex';
+
+                  books.forEach(book => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                      <td>${book.title}</td>
+                      <td> <span class="price">₹ ${book.price}</span></td>
+                      <td><span class="count">${book.quantity}</span></td>
+                    `;
+                    // table.appendChild(row);
+                    tbody.appendChild(row);
+                  });
+                } else {
+                  console.error('Error: books is not an array');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                // Hide the table and the div in case of error
+                table.style.display = 'none';
+                div.style.display = 'none';
+              });
+        }
+
+        function hideTable() {
+            // Get the table element
+            const table = document.querySelector('#booksTable');
+
+            // Get the div element
+            const div = document.querySelector('#products');
+            const userdiv = document.querySelector('#usersContainer');
+
+            // Hide the table and the div
+            table.style.display = 'none';
+            div.style.display = 'none';
+            userdiv.style.display = 'none';
+            
+        }
+
+
+        // Add an event listener to the "Users" button
+var usersButton = document.querySelector('a[title="Clients"]');
+usersButton.addEventListener('click', function() {
+    loadUsers();
+});
+
+// Function to load and display all users
+function loadUsers() {
+    // Fetch all users from the server
+    fetch('/auth/users/all')
+        .then(response => response.json())
+        .then(users => {
+            // Display the list of users
+            displayUsers(users);
+        })
+        .catch(error => console.error('Error:', error));
+}
+// Function to display the list of users
+function displayUsers(users) {
+    // Get the container where users will be displayed
+    const usersContainer = document.getElementById('usersContainer');
+    usersContainer.innerHTML = ''; // Clear previous content
+    usersContainer.style.display = 'block';
+
+    // Create a table to display users
+    const table = document.createElement('table');
+    table.id = 'usersTable';
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Blocked</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+
+    // Populate the table with user data
+    const tbody = table.querySelector('tbody');
+    users.forEach(user => {
+        const row = document.createElement('tr');
+        const blockedClass = user.blocked ? 'blocked-yes' : 'blocked-no';
+        row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td class="${blockedClass}">${user.blocked ? 'Yes' : 'No'}</td>
+            <td>
+                <button class="block-button" onclick="blockUserConfirmation('${user.email}', ${user.blocked})">${user.blocked ? 'Unblock' : 'Block'}</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Append the table to the container
+    usersContainer.appendChild(table);
+}
+
+function blockUserConfirmation(email, blocked) {
+    const confirmation = window.confirm(`Are you sure you want to ${blocked ? 'unblock' : 'block'} this user?`);
+    if (confirmation) {
+        blockUser(email);
+    }
+}
+
+function blockUser(email) {
+    fetch('/auth/users/block', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Successful!');
+            window.location.reload();
+        } else {
+            // Show an error message
+            alert('Failed to block/unblock user: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+    </script>
+
+    </body>
+</html>

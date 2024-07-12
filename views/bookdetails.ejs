@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Details</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+   <!-- <link rel="stylesheet" href="/stylo.css"> -->
+   <link rel="stylesheet" href="/style.css">
+
+  <style>
+    body,
+    h1,
+    h2,
+    p {
+      margin: 0;
+      padding: 0;
+    }
+.review-all {
+  margin-top: 20px; /* Add margin to separate from the main content */
+  margin-left: 0; /* Shift content to the left */
+  text-align: center; /* Align content to the center */
+}
+
+
+
+    /* Style the main container */
+    .big-contain {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px;
+    }
+
+    /* Style the book container */
+    .book-container {
+      display: flex;
+    }
+
+    /* Style the book image */
+    .book-image img {
+      max-width: 250px;
+      /* Increased image size */
+      height: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    /* Style the book details */
+    .book-details {
+      margin-left: 7rem;
+      margin-right: 15rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #book-p {
+      font-size: 20px;
+      /* Adjust as needed */
+      font-weight: bold;
+      border-color: black;
+    }
+
+    .book-details h3 {
+      margin-bottom: 20px;
+      /* Adjust as needed */
+    }
+
+    .book-details h5 {
+      margin-top: 15px;
+      /* Adjust as needed */
+    }
+
+    .book-details h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .book-details p {
+      margin-bottom: 5px;
+    }
+
+    /* Style the product details section */
+    .book-details h3 {
+      font-size: 23px;
+      margin-top: 40px;
+    }
+
+    .book-details h5 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .bigger-contain {
+      /* border: solid 2px black; */
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+      padding: 0.5rem;
+      margin: 3rem;
+    }
+
+    /* Style the buy section */
+    .buy-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      /* Align items to the start (left) */
+      margin-left: 20px;
+      /* Add margin to separate from book details */
+    }
+
+    .buy-section button {
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .buy-section button.add-to-cart {
+      background-color: #008cba;
+      margin-top: 22px;
+    }
+
+    .buy-section button:hover,
+    .buy-section button.add-to-cart:hover {
+      background-color: #45a049;
+    }
+
+    .star-rating {
+      font-size: 24px;
+    }
+
+    .stars {
+      cursor: pointer;
+    }
+
+    .star {
+      color: gray;
+    }
+
+    .star.active {
+      color: gold;
+    }
+
+    /* Add styles for different conditions */
+    #book-condition {
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .new {
+      background-color: green;
+    }
+
+    .like-new {
+      background-color: blue;
+    }
+
+    .good {
+      background-color: orange;
+    }
+
+    .fair {
+      background-color: yellow;
+    }
+
+    .poor {
+      background-color: red;
+    } 
+
+/* .whatsapp-logo {
+  width: 70px;
+  text-align: center;
+     margin-right: 50px;
+} */
+
+
+.whatsapp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; /* Adjust margin as needed */
+}
+
+.chat-text {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px; /* Adjust margin between text and logo */
+}
+
+.whatsapp-logo {
+  width: 100px; /* Adjust the width of the logo */
+}
+
+
+    
+  </style>
+
+<body>
+
+  <header class="header">
+
+    <div class="header-1">
+      <a href="/" class="logo"> <i class="fas fa-book"></i> Book Bazaar </a>
+
+      <form action="/search" class="search-form" method="GET">
+        <input type="search" name="q" placeholder="search here..." id="search-box">
+        <label for="search-box" class="fas fa-search"></label>
+      </form>
+
+      <div id="search-btn" class="fas fa-search" onclick="document.forms[0].submit()"></div>
+
+      <div class="icons">
+        <div id="search-btn" class="fas fa-search"></div>
+
+        <a href="#" id="add-book-link" class="fas fa-plus-square"></a>
+        <a href="#" class="fas fa-heart"></a>
+        <a href="#" class="fas fa-shopping-cart"></a>
+        <div id="login-btn" class="fas fa-user" onclick="toggleDropdown()"></div>
+        <% if (showDropdown) { %>
+          <div id="account-options" style="display: none;">
+            <div class="user-profile">
+              <span>Welcome, <%= user.name %></span>
+            </div>
+            <ul>
+              <a href="/userprofile">Profile</a>
+              <a href="#">Orders</a>
+              <button id="logoutButton">Logout</button>
+            </ul>
+          </div>
+          <% } %>
+      </div>
+
+    </div>
+
+    <div class="header-2">
+      <nav class="navbar">
+        <h2 class="navbar1" style="color:aliceblue">Book Details </h2>
+      </nav>
+    </div>
+
+  </header>
+
+  <!-- <nav class="bottom-navbar">
+    <a href="#home" class="fas fa-home"></a>
+    <a href="#featured" class="fas fa-list"></a>
+    <a href="#arrivals" class="fas fa-tags"></a>
+    <a href="#reviews" class="fas fa-comments"></a>
+  </nav> -->
+
+
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-sidebar-content">
+      <h3>Your Cart</h3>
+      <ul id="cart-items"></ul>
+      <p>Total: ₹<span id="cart-total">0</span></p>
+      <div class="coupon-section">
+        <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
+        <button id="apply-coupon-btn">Apply Coupon</button>
+      </div>
+      <button id="close-cart-btn" class="fas fa-times"></button>
+      <button id="checkout-btn">Checkout</button>
+    </div>
+  </div>
+
+
+  <div class="login-form-container">
+
+    <div id="close-login-btn" class="fas fa-times"></div>
+
+    <form action="" id="signin">
+      <h3>sign in</h3>
+      <span>Email</span>
+      <input type="email" name="" class="box" placeholder="Enter your email" id="">
+      <span>password</span>
+      <input type="password" name="" class="box" placeholder="Enter your password" id="">
+      <input type="submit" value="sign in" class="btn">
+      <p>Forgot password ? <a href="/auth/forgot-password">Click here</a></p>
+      <p>Don't have an account ? <a href="/registration.html">Create one</a></p>
+    </form>
+
+  </div>
+  <div class="bigger-contain">
+    <div class="big-contain">
+      <div class="book-container">
+        <div class="book-image">
+          <img src="<%= book.image %>" alt="<%= book.title %>">
+        </div>
+        <div class="big-books">
+          <div class="book-details">
+            <h1>
+              <%= book.title %>
+            </h1>
+
+            <p id="book-p">Price: ₹<span id="book-price">
+                <%= book.price %>
+              </span></p>
+
+            <h3>Product Details</h3>
+            <h5>Author: <%= book.author %>
+            </h5>
+            <h5>Publisher: <%= book.publisher %>
+            </h5>
+            <h5>Language: <%= book.language %>
+            </h5>
+            <h5>Description: <%= book.description %>
+            <!-- </h5>
+            <h5>Owner: <%= book.userOwner %>
+            </h5> -->
+             <h5>Category: <%= book.category%>
+            </h5>
+            <h5>Condition: <span id="book-condition" class="<%= book.condition %>">
+                <%= book.condition %>
+              </span></h5>
+            <a href="chat.html?username=<%= book.user %>&bookId=<%= book._id %>" style="font-size: 20px;">Chat with Seller Directly</a>
+
+          <!-- </div>
+         <a href="https://wa.me/<%= book.userphn %>" target="_blank">Chat with owner on WhatsApp</a>
+        </div> -->
+        </div>
+        <div>
+<div class="whatsapp-container">
+  <a href="https://wa.me/<%= book.userphn %>" target="_blank" class="whatsapp-link">
+    <span class="chat-text">Chat with Seller</span>
+    <img src="./image/whatsapp_logo.png" alt="WhatsApp Logo" class="whatsapp-logo">
+  </a>
+</div>
+
+
+
+
+
+ <!-- Star Rating -->
+  <div class="review-all">
+    <div class="star-rating">
+      <div class="stars">
+        <span class="star" data-rating="1">&#9733;</span>
+        <span class="star" data-rating="2">&#9733;</span>
+        <span class="star" data-rating="3">&#9733;</span>
+        <span class="star" data-rating="4">&#9733;</span>
+        <span class="star" data-rating="5">&#9733;</span>
+      </div>
+      <div class="rating-value"></div>
+    </div>
+
+    <div class="review-written">
+      <textarea id="review" placeholder="Write your review here..."></textarea>
+    </div>
+    <div class="btns">
+      <button id="submit-review-btn">Submit</button>
+    </div>
+
+    <div class="review-written-values"></div>
+    
+  </div>
+
+  </div>
+        </div>
+
+
+
+
+      </div>
+      <div class="buy-section">
+        <button onclick="buyNow()">Buy Now</button>
+        <button class="btn add-to-cart" data-name="<%= book.title %>" data-price="<%= book.price %>"
+          data-image="<%= book.image %>">Add to Cart</button>
+      </div>
+    </div>
+
+
+  <!-- Star Rating
+  <div class="review-all">
+    <div class="star-rating">
+      <div class="stars">
+        <span class="star" data-rating="1">&#9733;</span>
+        <span class="star" data-rating="2">&#9733;</span>
+        <span class="star" data-rating="3">&#9733;</span>
+        <span class="star" data-rating="4">&#9733;</span>
+        <span class="star" data-rating="5">&#9733;</span>
+      </div>
+      <div class="rating-value"></div>
+    </div>
+
+    <div class="review-written">
+      <textarea id="review" placeholder="Write your review here..."></textarea>
+    </div>
+    <div class="btns">
+      <button id="submit-review-btn">Submit</button>
+    </div>
+
+    <div class="review-written-values"></div>
+    
+  </div>
+
+  </div> -->
+
+  </div>
+
+
+  <script src="/sign_in.js"></script>
+  <script src="/style.js"></script>
+  <script src="/add_book.js"></script>
+  <script src="/cart.js"></script>
+
+  <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+  <script>
+    function buyNow() {
+      var title = '<%= book.title %>';
+      var price = '<%= book.price %>';
+      var image = '<%= book.image %>';
+      var mail = '<%= book.userEmail %>';
+      console.log("Title:", title);
+      console.log("Price:", price);
+      console.log("Image:", image);
+      console.log("Mail:", mail);
+      window.location.href = "newPage.html?title=" + encodeURIComponent(title) + "&price=" + encodeURIComponent(price) + "&image=" + encodeURIComponent(image) + "&mail=" + encodeURIComponent(mail);
+    }
+  </script>
+<!-- <script async type="text/javascript" src="https://collectcdn.com/embed.js"></script>
+<iframe src="https://links.collect.chat/662e813f3e99425e992d0f5c"  width="100%" height="600" frameBorder="0"></iframe> -->
+  
+  <script>
+    const abc='<%= book.userOwner %>';
+    console.log(abc)
+    const xx='<%= book.user %>';
+    console.log(xx)
+   const yy='<%= book._id %>';
+    console.log(yy)
+    
+    document.addEventListener('DOMContentLoaded', async function () {
+      const stars = document.querySelectorAll('.star');
+      const ratingValue = document.querySelector('.rating-value');
+      const reviewwrittenvalues = document.querySelector('.review-written-values');
+      const reviewTextarea = document.getElementById('review');
+      const submitReviewBtn = document.getElementById('submit-review-btn');
+      const reviewWrittenContainer = document.querySelector('.review-written');
+      const reviewAllContainer = document.querySelector('.review-all');
+      const reviewMsgContainer = document.createElement('div');
+      const bookId = '<%= book._id %>'; // Replace this with the actual book ID
+      const image = '<%= book.image %>';
+
+      let userRating = null;
+      let reviewText = '';
+      let loggedInUserId = null; // Variable to store logged in user ID
+
+
+      // Function to fetch the logged in user's ID
+      async function fetchLoggedInUserId() {
+        try {
+          const response = await axios.get('/get-logged-in-user-id');
+          return response.data.userId; // Assuming the server returns the logged in user's ID
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            // Handle 401 Unauthorized error
+            // alert("Please log in first before submitting a review.");
+          } else {
+            console.error("Error fetching logged in user ID:", error);
+          }
+          return null;
+        }
+      }
+
+
+      loggedInUserId = await fetchLoggedInUserId();
+      async function fetchUserRatingReview() {
+        try {
+          const response = await axios.get('/user-rating-review?bookId=${bookId}');
+          return response.data; // Returns user's rating and review or null if not rated
+        } catch (error) {
+          console.error("Error fetching user rating and review:", error);
+          return null;
+        }
+      }
+
+
+      const userRatingReview = await fetchUserRatingReview();
+      if (userRatingReview && userRatingReview.rating) {
+        userRating = userRatingReview.rating;
+        ratingValue.innerHTML = 'Your rating: ' + userRating + ' stars.';
+        updateStars(userRating);
+      }
+      if (userRatingReview && userRatingReview.review) {
+        reviewText = userRatingReview.review;
+        reviewwrittenvalues.innerText = reviewText;
+        reviewAllContainer.appendChild(reviewwrittenvalues);
+        document.querySelectorAll('.btns').forEach(btn => {
+          btn.style.display = 'none';
+        });
+        document.querySelectorAll('.review-written').forEach(reviewWritten => {
+          reviewWritten.style.display = 'none';
+        });
+      }
+
+      stars.forEach(function (star) {
+        star.addEventListener('click', function () {
+          if (!userRating) {
+            const rating = parseInt(star.getAttribute('data-rating'));
+            ratingValue.innerHTML = 'You rated this ' + rating + ' stars.';
+            userRating = rating;
+            updateStars(userRating);
+          }
+        });
+      });
+
+      reviewTextarea.addEventListener('input', function () {
+        reviewText = reviewTextarea.value.trim();
+      });
+
+      submitReviewBtn.addEventListener('click', async function () {
+        if (loggedInUserId) {
+          try {
+            const response = await axios.post('/submit-rating-review', {
+              userId: loggedInUserId,
+              bookId: '<%= book._id %>',
+              rating: userRating,
+              review: reviewText,
+              bookimg: '<%= book.image %>',
+              name: '<%= user ? user.name : "Anonymous" %>' 
+            });
+            console.log("Review submitted successfully:", response.data);
+            reviewWrittenContainer.style.display = 'none';
+            submitReviewBtn.style.display = 'none';
+            reviewMsgContainer.textContent = reviewText;
+            reviewAllContainer.appendChild(reviewMsgContainer);
+          } catch (error) {
+            console.error("Error submitting review:", error);
+          }
+        } else {
+          console.error("User not logged in");
+          alert("Please log in first before submitting a review.");
+          reviewTextarea.value = '';
+          userRating = null;
+          updateStars(0); 
+          reviewwrittenvalues.innerText = '';
+          reviewAllContainer.appendChild(reviewwrittenvalues);
+          ratingValue.innerHTML = '';
+        }
+      });
+
+      function updateStars(rating) {
+        stars.forEach(function (s, index) {
+          if (index < rating) {
+            s.classList.add("active");
+          } else {
+            s.classList.remove("active");
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+
+</html>

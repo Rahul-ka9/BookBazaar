@@ -1,0 +1,96 @@
+<!-- registration.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Registration</title>
+    <link rel="stylesheet" href="reg_style.css" />
+  </head>
+  <body>
+    <div id="container">
+      <h1 id="userRegistrationHeading">User Registration</h1>
+      <form id="registrationForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required /><br /><br />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required /><br /><br />
+
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+        /><br /><br />
+
+        <label for="phone">WhatsApp Number:</label>
+        <input type="tel" id="phone" name="phone" required /><br /><br />
+
+        <button type="submit">Register</button>
+        <a href="/" class="home-button">Home</a>
+      </form>
+
+      <div id="registrationMessage"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+          const phone = document.getElementById("phone").value;
+          const messageElement = document.getElementById("registrationMessage");
+          const registerButton = document.querySelector(
+            'button[type="submit"]'
+          );
+
+          // Basic client-side validation
+          if (
+            name.trim() === "" ||
+            email.trim() === "" ||
+            password.trim() === "" ||
+            phone.trim() === ""
+          ) {
+            messageElement.textContent = "All fields are required.";
+            return;
+          }
+
+          // Validate email format using a regular expression
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            messageElement.textContent = "Please enter a valid email address.";
+            return;
+          }
+
+          // If all validations pass, submit the form
+          const formData = new FormData(this);
+
+          fetch("/auth/register", {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                // Registration successful, redirect to the cart page
+                // window.location.href = 'index.html';
+                messageElement.textContent = data.message;
+              } else {
+                messageElement.textContent = data.message;
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+    </script>
+  </body>
+</html>

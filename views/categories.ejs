@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="/style.css">
+   
+</head>
+<body>
+    <header class="header">
+
+        <div class="header-1">
+    
+            <a href="/" class="logo"> <i class="fas fa-book"></i> Book Bazaar </a>
+    
+            <!-- <form action="" class="search-form">
+                <input type="search" name="" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form> -->
+            <form action="/search" class="search-form" method="GET">
+                <input type="search" name="q" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+    
+            <div id="search-btn" class="fas fa-search" onclick="document.forms[0].submit()"></div>
+    
+            <div class="icons">
+                <div id="search-btn" class="fas fa-search"></div>
+    
+                <a href="#" id="add-book-link" class="fas fa-plus-square"></a>
+                <!-- <a href="#" class="fas fa-heart"></a> -->
+                <a href="#" class="fas fa-heart" onclick="redirectToFavorites()"></a>
+                <a href="#" class="fas fa-shopping-cart"></a>
+                
+                <div id="login-btn" class="fas fa-user" onclick="toggleDropdown()"></div>
+                <% if (showDropdown) { %>
+                    <div id="account-options" style="display: none;">
+                      <div class="user-profile">
+                        <span>Welcome, <%= user.name %></span>
+                      </div>
+                      <ul>
+                        <a href="/userprofile">Profile</a>
+                        <a href="#">Orders</a>
+                        <button id="logoutButton">Logout</button>
+                      </ul>
+                    </div>
+                    <% } %>
+            </div>
+            
+    
+        </div>
+    
+        <div class="header-2">
+            <nav class="navbar">
+                <a href="/">home</a>
+                <a href="/">featured</a>
+                <a href="/">arrivals</a>
+                <a href="/">reviews</a>
+                <a href="/categories">categories</a>
+            </nav>
+        </div>
+        
+    
+    </header>
+    
+    <!-- header section ends -->
+    
+    <!-- bottom navbar  -->
+    
+    <nav class="bottom-navbar">
+        <a href="/" class="fas fa-home"></a>
+        <a href="/" class="fas fa-list"></a>
+        <a href="/" class="fas fa-tags"></a>
+        <a href="/" class="fas fa-comments"></a>
+    </nav>
+    
+    
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-sidebar-content">
+          <h3>Your Cart</h3>
+          <ul id="cart-items"></ul>
+          <p>Total: ₹<span id="cart-total">0</span></p>
+          <!-- Coupon Section -->
+          <div class="coupon-section">
+            <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
+            <button id="apply-coupon-btn">Apply Coupon</button>
+        </div>
+          <button id="close-cart-btn" class="fas fa-times"></button>
+          <button id="checkout-btn">Checkout</button>
+        </div>
+      </div>
+      
+    <!-- login form  -->
+    
+    <div class="login-form-container">
+    
+        <div id="close-login-btn" class="fas fa-times"></div>
+    
+        <form action="" id="signin">
+            <h3>sign in</h3>
+            <span>Email</span>
+            <input type="email" name="" class="box" placeholder="Enter your email" id="">
+            <span>password</span>
+            <input type="password" name="" class="box" placeholder="Enter your password" id="">
+            <!-- <div class="checkbox">
+                <input type="checkbox" name="" id="remember-me">
+                <label for="remember-me"> remember me</label>
+            </div> -->
+            <input type="submit" value="sign in" class="btn">
+            <p>Forgot password ? <a href="/auth/forgot-password">Click here</a></p>
+            <p>Don't have an account ? <a href="/registration.html">Create one</a></p>
+        </form>
+    
+    </div>
+    
+    
+
+    <h1 style="text-align: center;  border-radius: 1rem; border-color: black;">all Categories</h1>
+        <!-- Render books under respective headings -->
+        <div class="productdetailpage">
+    <% for (const category in groupedBooks) { %>
+      <div class="category">
+        <h1 class="heading"><%= category %></h1>
+        <ul class="book-list">
+          <% groupedBooks[category].forEach(book => { %>
+            <li class="book-item">
+              <div class="product-box">
+                <a href="#" class="fas fa-heart" onclick="addToFavorites('<%= book.id %>')"></a>
+                <div class="product-image">
+                    <a href="/bookDetails?id=<%= book.id %>"><img src="<%= book.image %>"
+                        alt="<%= book.title %>"></a>
+                </div>
+                <div class="product-details">
+                  <h2><%= book.title %></h2>
+                  <p><%= book.author %></p>
+                  <div class="price"><p>₹<%= book.price.toFixed(2) %></p></div>
+                  <button class="btn add-to-cart" data-name="<%= book.title %>" data-price="<%= book.price %>" data-image="<%= book.image %>">Add to Cart</button>
+                  
+                </div>
+              </div>
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    <% } %>
+  </div>
+
+    <footer>
+        <!-- Footer content -->
+    </footer>
+    <!-- custom js file link  -->
+<script src="/style.js"></script>
+<script src="/add_book.js"></script>
+<script src="/cart.js"></script>
+<script src="/sign_in.js"></script>
+<script src="/fav.js"></script>
+</body>
+</html>

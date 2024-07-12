@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Result</title>
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="header-1">
+            <a href="/" class="logo"> <i class="fas fa-book"></i> Book Bazaar </a>
+
+            <form action="/search" class="search-form" method="GET">
+                <input type="search" name="q" placeholder="search here..." id="search-box">
+                <label for="search-box" class="fas fa-search"></label>
+            </form>
+
+            <div id="search-btn" class="fas fa-search" onclick="document.forms[0].submit()"></div>
+
+            <div class="icons">
+                <div id="search-btn" class="fas fa-search"></div>
+
+                <a href="#" id="add-book-link" class="fas fa-plus-square"></a>
+
+                <a href="#" class="fas fa-shopping-cart"></a>
+                <div id="login-btn" class="fas fa-user" onclick="toggleDropdown()"></div>
+                <% if (showDropdown) { %>
+                    <div id="account-options" style="display: none;">
+                        <div class="user-profile">
+                            <span>Welcome, <%= user.name %></span>
+                        </div>
+                        <ul>
+                            <a href="#">Profile</a>
+                            <a href="#">Orders</a>
+                            <button id="logoutButton">Logout</button>
+                        </ul>
+                    </div>
+                    <% } %>
+            </div>
+
+        </div>
+
+        <div class="header-2">
+            <nav class="navbar">
+                <h2 class="navbar1" style="color: whitesmoke">Search Results for "<%= query %>"</h2>
+            </nav>
+        </div>
+
+
+
+    </header>
+
+    <nav class="bottom-navbar">
+        <a href="#home" class="fas fa-home"></a>
+        <a href="#featured" class="fas fa-list"></a>
+        <a href="#arrivals" class="fas fa-tags"></a>
+        <a href="#reviews" class="fas fa-comments"></a>
+    </nav>
+
+
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-sidebar-content">
+            <h3>Your Cart</h3>
+            <ul id="cart-items"></ul>
+            <p>Total: ₹<span id="cart-total">0</span></p>
+
+            <div class="coupon-section">
+                <input type="text" id="coupon-code" placeholder="Enter Coupon Code">
+                <button id="apply-coupon-btn">Apply Coupon</button>
+            </div>
+            <button id="close-cart-btn" class="fas fa-times"></button>
+            <button id="checkout-btn">Checkout</button>
+        </div>
+    </div>
+
+
+    <div class="login-form-container">
+
+        <div id="close-login-btn" class="fas fa-times"></div>
+
+        <form action="" id="signin">
+            <h3>sign in</h3>
+            <span>Email</span>
+            <input type="email" name="" class="box" placeholder="Enter your email" id="">
+            <span>password</span>
+            <input type="password" name="" class="box" placeholder="Enter your password" id="">
+            <input type="submit" value="sign in" class="btn">
+            <p>Forgot password ? <a href="/auth/forgot-password">Click here</a></p>
+            <p>Don't have an account ? <a href="/registration.html">Create one</a></p>
+        </form>
+
+    </div>
+    <div class="container">
+        <% if (results.length> 0) { %>
+            <div class="search-results-container">
+                <% results.forEach(function(book) { %>
+                    <div class="book-card">
+                        <a href="/bookDetails?id=<%= book._id %>">
+                            <img src="<%= book.image %>" alt="<%= book.title %>"
+                                onclick="redirectToBookDetails('<%= book._id %>')">
+                        </a>
+                        <div class="book-details">
+                            <h3>
+                                <%= book.title %>
+                            </h3>
+                            <p>Author: <%= book.author %>
+                            </p>
+                            <p>Price: ₹<%= book.price %>
+                            </p>
+                            <div class="buy-section">
+                                <button onclick="buyNow('<%= book._id %>')">Buy Now</button>
+                            </div>
+                            <!-- <div class="add-to-cart"> -->
+                            <button class="btn add-to-cart" data-name="<%= book.title %>" data-price="<%= book.price %>"
+                                data-image="<%= book.image %>">Add to Cart</button>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <% }); %>
+            </div>
+            <% } else { %>
+                <div class="search-results-container">
+                    <p style="font-size: 18px; color: #555; font-weight: bold;">No Books Found for "<%= query %>"</p>
+                </div>
+                <% } %>
+    </div>
+
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <script src="/style.js"></script>
+    <script src="/add_book.js"></script>
+    <script src="/cart.js"></script>
+    <script src="/sign_in.js"></script>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <script>
+
+        function buyNow(title, price, image) {
+
+            window.location.href = "newPage.html?title=" + encodeURIComponent(title) + "&price=" + encodeURIComponent(price) + "&image=" + encodeURIComponent(image);
+        }
+        const searchResultsContainer = document.querySelector('.search-results-container');
+        const searchResultItems = document.querySelectorAll('.search-result-item');
+
+        let selectedIndex = -1;
+
+        function handleKeyboardEvent(event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    navigateResults(-1);
+                    break;
+                case 'ArrowDown':
+                    navigateResults(1);
+                    break;
+                case 'Enter':
+                    if (selectedIndex >= 0 && searchResultItems[selectedIndex]) {
+                        window.location.href = searchResultItems[selectedIndex].querySelector('a').href;
+                    }
+                    break;
+            }
+        }
+
+        function navigateResults(direction) {
+
+            if (selectedIndex >= 0 && searchResultItems[selectedIndex]) {
+                searchResultItems[selectedIndex].classList.remove('selected');
+            }
+
+            selectedIndex = (selectedIndex + direction + searchResultItems.length) % searchResultItems.length;
+
+            if (searchResultItems[selectedIndex]) {
+                searchResultItems[selectedIndex].classList.add('selected');
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyboardEvent);
+    </script>
+
+
+</body>
+
+</html>
